@@ -9,4 +9,10 @@ public interface GenreRepository extends JpaRepository<Genres, Integer> {
             "From Genres\n" +
             "Where GenreId = :id" , nativeQuery = true)
     String getGenreNameById(int id);
+
+    @Query(value = "Select GenreId\n" +
+            "From Genres\n" +
+            "Where GenreName = :name", nativeQuery = true)
+    Integer getGenresIdByName(String name);
+    boolean existsByGenreName(String genreName);
 }

@@ -7,15 +7,16 @@ import java.util.Objects;
 
 @Embeddable
 @Data
+@NoArgsConstructor
 public class BookAuthorID {
     private int BookId;
     private int AuthorId;
 
-    public BookAuthorID() {}
     public BookAuthorID(int bookId, int authorId) {
         this.BookId = bookId;
         this.AuthorId = authorId;
     }
+    public void BookAuthors() {}
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

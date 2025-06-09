@@ -12,4 +12,9 @@ public interface BookRepository extends JpaRepository<Books, Integer> {
             "Where (:fromYear IS NULL OR PublicationYear >= :fromYear)\n" +
             "AND (:toYear IS NULL OR PublicationYear <= :toYear)", nativeQuery = true)
     List<Books> exportCondition(int fromYear, int toYear);
+    @Query(value = "Select Top 1 BookId\n" +
+            "From Books\n" +
+            "Order By BookId desc", nativeQuery = true)
+    int getLastestBookId();
+    boolean existsByTitle(String title);
 }

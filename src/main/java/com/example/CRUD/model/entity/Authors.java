@@ -6,10 +6,20 @@ import lombok.*;
 
 @Entity
 @Data
+@AllArgsConstructor
 public class Authors {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int AuthorId;
-    private String Name;
-    private int BirthYear;
+    private int authorId;
+    private String name;
+    private int birthYear;
+
+    public Authors(String author) {
+        this.name = author;
+    }
+
+    public Authors(String authorName, int birthYear) {
+        this.name = authorName;
+        this.birthYear = birthYear;
+    }
 }

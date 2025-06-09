@@ -9,7 +9,10 @@ import lombok.*;
 public class Genres {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int GenreId;
-    private String GenreName;
+    private int genreId;
+    private String genreName;
 
+    public Genres(String genreName) {
+        this.genreName = genreName;
+    }
 }
