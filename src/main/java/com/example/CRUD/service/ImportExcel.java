@@ -80,11 +80,11 @@ public class ImportExcel {
                 }
                 System.out.println("Second ID: "+genreId);
 
-                // Lưu sách
+                // Save book
                 Books book = bookRepository.save(new Books(title, publicationYear, genreId));
                 int bookId = book.getBookId();
 
-                // Xử lý tác giả
+                // authors
                 String[] authors = authorName.split(",\\s*");
                 for (String author : authors) {
                     author = author.trim();
@@ -95,7 +95,7 @@ public class ImportExcel {
                         authorId = newAuthor.getAuthorId();
                     }
 
-                    // Tạo quan hệ sách - tác giả
+                    // Create book author
                     BookAuthorID bookAuthorID = new BookAuthorID(bookId, authorId);
                     bookAuthorRepository.save(new BookAuthors(bookAuthorID));
                 }

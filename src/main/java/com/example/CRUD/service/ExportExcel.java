@@ -27,12 +27,22 @@ public class ExportExcel {
     @Autowired
     private BookAuthorRepository baRepo;
 
-    public ByteArrayInputStream exportToExcel(int fromYear, int toYear) throws IOException {
-        if (fromYear > toYear) {
-            throw new IllegalArgumentException("fromYear cannot be greater than toYear");
-        }
-        if (fromYear < 0 || toYear < 0) {
-            throw new IllegalArgumentException("Years cannot be negative");
+    public ByteArrayInputStream exportToExcel(Integer fromYear, Integer toYear) throws IOException {
+        if (fromYear != null && toYear != null) {
+            if (fromYear > toYear) {
+                throw new IllegalArgumentException("fromYear cannot be greater than toYear");
+            }
+            if (fromYear < 0 || toYear < 0) {
+                throw new IllegalArgumentException("Years cannot be negative");
+            }
+        } else if (fromYear != null) {
+            if (fromYear < 0) {
+                throw new IllegalArgumentException("fromYear cannot be negative");
+            }
+        } else if (toYear != null) {
+            if (toYear < 0) {
+                throw new IllegalArgumentException("toYear cannot be negative");
+            }
         }
         List<Books> books = bookRepo.exportCondition(fromYear, toYear);
 

@@ -6,6 +6,7 @@ import lombok.*;
 
 @Entity
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class Authors {
     @Id

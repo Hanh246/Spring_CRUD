@@ -11,7 +11,7 @@ public interface BookRepository extends JpaRepository<Books, Integer> {
             "From Books\n" +
             "Where (:fromYear IS NULL OR PublicationYear >= :fromYear)\n" +
             "AND (:toYear IS NULL OR PublicationYear <= :toYear)", nativeQuery = true)
-    List<Books> exportCondition(int fromYear, int toYear);
+    List<Books> exportCondition(Integer fromYear, Integer toYear);
     @Query(value = "Select Top 1 BookId\n" +
             "From Books\n" +
             "Order By BookId desc", nativeQuery = true)

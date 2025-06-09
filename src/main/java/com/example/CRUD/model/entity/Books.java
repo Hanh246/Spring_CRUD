@@ -5,6 +5,8 @@ import lombok.*;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Books {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
