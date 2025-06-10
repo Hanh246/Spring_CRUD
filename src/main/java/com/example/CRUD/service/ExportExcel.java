@@ -3,6 +3,7 @@ package com.example.CRUD.service;
 import com.example.CRUD.model.entity.Authors;
 import com.example.CRUD.model.entity.Books;
 import com.example.CRUD.repository.BookAuthorRepository;
+import com.example.CRUD.repository.BookCopyRepository;
 import com.example.CRUD.repository.BookRepository;
 import com.example.CRUD.repository.GenreRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +27,8 @@ public class ExportExcel {
     private GenreRepository genreRepo;
     @Autowired
     private BookAuthorRepository baRepo;
+    @Autowired
+    private BookCopyRepository bookCopyRepo;
 
     public ByteArrayInputStream exportToExcel(Integer fromYear, Integer toYear) throws IOException {
         if (fromYear != null && toYear != null) {
@@ -60,6 +63,7 @@ public class ExportExcel {
             bookHeader.createCell(2).setCellValue("Publication Year");
             bookHeader.createCell(3).setCellValue("Author");
             bookHeader.createCell(4).setCellValue("Genre");
+            bookHeader.createCell(5).setCellValue("Copies");
 
             for (Books book : books) {
                 Row bookRow = bookSheet.createRow(rowIdx++);
@@ -68,6 +72,7 @@ public class ExportExcel {
                 bookRow.createCell(2).setCellValue(book.getPublicationYear());
                 bookRow.createCell(3).setCellValue(baRepo.getAuthorNameByBookId(book.getBookId()));
                 bookRow.createCell(4).setCellValue(genreRepo.getGenreNameById(book.getGenreId()));
+                bookRow.createCell(5).setCellValue(bookCopyRepo.getBookCopiesQuantityById(book.getBookId()));
             }
             //Author sheet
             Sheet authorSheet = workbook.createSheet("Authors");

@@ -1,10 +1,7 @@
 package com.example.CRUD.service;
 
 import com.example.CRUD.model.entity.*;
-import com.example.CRUD.repository.AuthorRepository;
-import com.example.CRUD.repository.BookAuthorRepository;
-import com.example.CRUD.repository.BookRepository;
-import com.example.CRUD.repository.GenreRepository;
+import com.example.CRUD.repository.*;
 import com.example.CRUD.util.ExcelValidator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -29,6 +26,8 @@ public class ImportExcel {
     private BookAuthorRepository bookAuthorRepository;
     @Autowired
     private ExcelValidator excelValidator;
+    @Autowired
+    private BookCopyRepository bookCopyRepository;
 
     public void saveExcelData(MultipartFile file) {
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
@@ -56,7 +55,7 @@ public class ImportExcel {
 
             //Sheet books
             Sheet sheet = workbook.getSheetAt(0);
-            List<String> bookColumnNames = Arrays.asList("Title", "Publication Year", "Author" , "Genre");
+            List<String> bookColumnNames = Arrays.asList("Title", "Publication Year", "Author" , "Genre", "Copies");
             if (!excelValidator.validateColumnNames(sheet, bookColumnNames)) {
                 throw new RuntimeException("Invalid Book column names!");
             }
@@ -67,7 +66,24 @@ public class ImportExcel {
                 int publicationYear = (int) row.getCell(2).getNumericCellValue();
                 String authorName = row.getCell(3).getStringCellValue();
                 String genreName = row.getCell(4).getStringCellValue();
-                if(bookRepository.existsByTitle(title)){
+                int copies = (int) row.getCell(5).getNumericCellValue();
+                int bookCopies = bookCopyRepository.getBookCopiesQuantityByBookTitle(title);
+                if(bookRepository.existsByTitle(title) && bookCopies == copies){
+                    continue;
+                }
+                if(bookRepository.existsByTitle(title) && bookCopies != copies){
+                    int bkId = bookRepository.getBookIdByTitle(title);
+                    List<BookCopies> bookCopiesList = bookCopyRepository.getBookCopiesByBookId(bkId);
+                    if(copies > bookCopies){
+                        for(int j = bookCopies; j < copies; j++){
+                            bookCopyRepository.save(new BookCopies(bkId, "Available"));
+                        }
+                    } else{
+                        int toDelete = bookCopies - copies;
+                        for (int j = 0; j < toDelete; j++) {
+                            bookCopyRepository.deleteById(bookCopiesList.get(j).getCopyId());
+                        }
+                    }
                     continue;
                 }
 
@@ -98,6 +114,10 @@ public class ImportExcel {
                     // Create book author
                     BookAuthorID bookAuthorID = new BookAuthorID(bookId, authorId);
                     bookAuthorRepository.save(new BookAuthors(bookAuthorID));
+                }
+                // Save book copies
+                for (int j = 0; j < copies; j++) {
+                    bookCopyRepository.save(new BookCopies(bookId, "Available"));
                 }
             }
         } catch (Exception e) {
