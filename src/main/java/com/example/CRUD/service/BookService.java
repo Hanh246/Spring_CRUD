@@ -4,6 +4,9 @@ import com.example.CRUD.model.dto.SearchValueDTO;
 import com.example.CRUD.model.entity.Books;
 import com.example.CRUD.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +17,9 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<Books> getAllBooks() {
-        return bookRepository.findAll(Sort.by(Sort.Direction.ASC, "publicationYear"));
+    public Page<Books> getAllBooks(int page, int size) {
+        Pageable pageable = PageRequest.of( page,  size);
+        return bookRepository.findAll(pageable);
     }
 
     public Books getBookById(int id) {
