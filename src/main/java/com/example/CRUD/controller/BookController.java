@@ -1,5 +1,7 @@
 package com.example.CRUD.controller;
 
+import com.example.CRUD.model.dto.BookDTO;
+import com.example.CRUD.model.entity.Authors;
 import com.example.CRUD.model.entity.Books;
 import com.example.CRUD.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ public class BookController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 
-        Page<Books> pageBooks = bookService.getAllBooks(page, size);
+        Page<BookDTO> pageBooks = bookService.getAllBooks(page, size);
 
         Map<String, Object> response = new HashMap<>();
         response.put("books", pageBooks.getContent());
@@ -32,17 +34,22 @@ public class BookController {
     }   
 
     @GetMapping("/{id}")
-    public Books getBookById(@PathVariable int id) {
+    public BookDTO getBookById(@PathVariable int id) {
         return bookService.getBookById(id);
     }
 
+    @GetMapping("/authors/{id}")
+    public String getAuthorNameByBookId(@PathVariable int id){
+        return bookService.getAuthorsByBook(id);
+    }
+
     @PostMapping
-    public Books createBook(@RequestBody Books book) {
+    public Books createBook(@RequestBody BookDTO book) {
         return bookService.createBook(book);
     }
 
     @PutMapping("/{id}")
-    public void updateBook(@PathVariable int id, @RequestBody Books book) {
+    public void updateBook(@PathVariable int id, @RequestBody BookDTO book) {
         bookService.updateBook(id, book);
     }
 

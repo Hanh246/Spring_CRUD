@@ -6,6 +6,8 @@ import lombok.*;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Genres {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
