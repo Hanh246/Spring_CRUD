@@ -18,4 +18,8 @@ public interface BookAuthorRepository extends JpaRepository<BookAuthors, BookAut
             "From BookAuthors b join Authors a on b.AuthorId = a.AuthorId\n" +
             "Where b.BookId = :id", nativeQuery = true)
     List<Authors> getAuthorByBookId(int id);
+    @Query(value = "Select *\n" +
+            "From BookAuthors\n" +
+            "Where BookId = :id", nativeQuery = true)
+    List<BookAuthors> getBookAuthorByBookId(int id);
 }

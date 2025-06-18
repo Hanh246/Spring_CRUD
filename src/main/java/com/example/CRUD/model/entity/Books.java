@@ -24,6 +24,7 @@ public class Books {
         this.publicationYear = publicationYear;
         this.genreId = genreId;
     }
+
     @OneToMany(mappedBy = "bookId")
     private List<BookCopies> bookCopies = new ArrayList<>();
 

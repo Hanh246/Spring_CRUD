@@ -1,9 +1,12 @@
 package com.example.CRUD.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class LoginDTO {
+    @NotBlank(message = "Name is required")
     private String name;
-    private String email;
+    @NotBlank(message = "Password is required")
+    private String password;
 }
